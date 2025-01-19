@@ -68,7 +68,7 @@ public class Elevator extends SubsystemBase {
         .idleMode(IdleMode.kBrake);
     elevatorFollowerConfig.closedLoop
         .feedbackSensor(FeedbackSensor.kNoSensor)
-        .pid(0, 0, 0);
+        .pid(1.0, 0, 0);
     
     
     elevatorFollowerConfig
