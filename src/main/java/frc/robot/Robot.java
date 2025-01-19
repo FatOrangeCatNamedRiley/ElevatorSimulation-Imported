@@ -23,6 +23,8 @@ public class Robot extends TimedRobot {
   public static Elevator elevator;
   public static OI oi;
 
+
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -90,7 +92,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    elevator.updateSetpoint(3.0);
+  }
 
   @Override
   public void testInit() {

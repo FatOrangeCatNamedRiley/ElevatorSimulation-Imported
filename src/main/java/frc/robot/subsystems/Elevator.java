@@ -36,6 +36,8 @@ public class Elevator extends SubsystemBase {
   private double motorOutput;
   private double setpoint;
 
+  double[] measurementStdDevs = {0.01, 0.01};
+
   public enum ElevatorState{
     ZEROED, SETPOINT, DISABLED;
   }
@@ -46,8 +48,10 @@ public class Elevator extends SubsystemBase {
 
   public Elevator() {
 
+
+    
     elevatorMotorsim = DCMotor.getVex775Pro(2);
-    elevatorSim = new ElevatorSim(elevatorMotorsim, Constants.Elevator.kGearRatio, Constants.Elevator.kCarriageMass, Constants.Elevator.kPulleyRadius, Constants.Elevator.kMinHeight, Constants.Elevator.kMaxHeight, true, errorSum, 0.01);
+    elevatorSim = new ElevatorSim(elevatorMotorsim, Constants.Elevator.kGearRatio, Constants.Elevator.kCarriageMass, Constants.Elevator.kPulleyRadius, Constants.Elevator.kMinHeight, Constants.Elevator.kMaxHeight, true, errorSum, measurementStdDevs);
     
     elevatorMaster = new SparkMax(1, MotorType.kBrushless);
     elevatorFollower = new SparkMax(2, MotorType.kBrushless);
@@ -172,6 +176,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void updateState(ElevatorState newState){
+    System.out.println("updating state... supposedly");
     currState = newState;
   }
 

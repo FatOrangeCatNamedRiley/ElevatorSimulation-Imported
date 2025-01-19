@@ -7,6 +7,11 @@ import edu.wpi.first.math.util.Units;
 
 public class Constants {
 	
+	public final static class OI{
+		//OI Constants
+		public static final int kDriverControllerPort = 0;
+	}
+
 	public final static class Elevator{
 	//Elevator Constants
 	public static final double kGearRatio = 10.0;  // 40:1 Reduction
