@@ -5,7 +5,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.Spark.SparkMaxLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -44,18 +47,36 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
 
     elevatorMotorsim = DCMotor.getVex775Pro(2);
-    elevatorSim = new ElevatorSim(elevatorMotorsim, Constants.Elevator.kGearRatio, Constants.Elevator.kCarriageMass, Constants.Elevator.kPulleyRadius, Constants.Elevator.kMinHeight, Constants.Elevator.kMaxHeight);
+    elevatorSim = new ElevatorSim(elevatorMotorsim, Constants.Elevator.kGearRatio, Constants.Elevator.kCarriageMass, Constants.Elevator.kPulleyRadius, Constants.Elevator.kMinHeight, Constants.Elevator.kMaxHeight, true, errorSum, 0.01);
     
     elevatorMaster = new SparkMax(1, MotorType.kBrushless);
-    elevatorFollower = new SparkMax(2, MotorTye.kBrushless);
+    elevatorFollower = new SparkMax(2, MotorType.kBrushless);
 
     bottomLimitSwitch = new DigitalInputWrapper(5);
 
-    elevatorMaster.restoreFactoryDefaults();   // Resets any motor settings such as inversions, current limiting from previous programs
-    elevatorFollower.restoreFactoryDefaults();
+    
+    SparkMaxConfig elevatorMasterConfig = new SparkMaxConfig();
+    SparkMaxConfig elevatorFollowerConfig = new SparkMaxConfig();
 
-    elevatorFollower.follow(elevatorMaster);
 
+    elevatorMasterConfig
+        .inverted(true)
+        .idleMode(IdleMode.kBrake);
+    elevatorFollowerConfig.closedLoop
+        .feedbackSensor(FeedbackSensor.kNoSensor)
+        .pid(0, 0, 0);
+    
+    
+    elevatorFollowerConfig
+      .inverted(false) 
+      .idleMode(IdleMode.kCoast);
+    elevatorFollowerConfig.closedLoop
+      .feedbackSensor(FeedbackSensor.kPrimaryEncoder) 
+      .pid(1.0, 0.0, 0.0);
+
+      
+
+  
     motorOutput = 0;
     setpoint = 0;
 
@@ -131,7 +152,7 @@ public class Elevator extends SubsystemBase {
 
   public double getElevatorHeight(){
     if(RobotBase.isReal()){
-      return elevatorMaster.getSelectedSensorPosition() * Constants.Elevator.kDistancePerTick;
+      return elevatorMaster.getEncoder().getPosition() * Constants.Elevator.kDistancePerTick;
     }
     return elevatorSim.getPositionMeters();
   }
@@ -142,7 +163,7 @@ public class Elevator extends SubsystemBase {
       else 
         bottomLimitSwitch.set(false);
 
-      elevatorSim.setInput(elevatorMaster.getMotorOutputPercent()* RobotController.getBatteryVoltage());
+      elevatorSim.setInput(elevatorMaster.get() * RobotController.getBatteryVoltage());
       elevatorSim.update(.02);
 
       RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
