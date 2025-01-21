@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    elevator.updateSetpoint(3.0);
+    elevator.updateSetpoint(1.5);
   }
 
   @Override

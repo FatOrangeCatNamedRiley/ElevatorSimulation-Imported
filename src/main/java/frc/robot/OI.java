@@ -11,9 +11,8 @@ import frc.robot.commands.MoveToSetpoint;
 public class OI {
 
     public OI(){
-        SmartDashboard.putData("Elevator Bottom", new MoveToSetpoint(Constants.Elevator.kBottomSetpoint));
-        SmartDashboard.putData("Elevator Top", new MoveToSetpoint(Constants.Elevator.kHightSetpoint));
-        SmartDashboard.putData("Elevator Mid", new MoveToSetpoint(Constants.Elevator.kMidSetpoint));
+        
+        SmartDashboard.putData("Move To Setpoint", new MoveToSetpoint(Constants.Elevator.kHightSetpoint));
     }
 
 
