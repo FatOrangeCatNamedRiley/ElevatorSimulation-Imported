@@ -5,10 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.MoveToSetpoint;
+import frc.robot.commands.SetElevatorSetpoint;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -39,7 +44,16 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    //m_driverController.a().whileTrue()
+
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+                .onTrue(new SetElevatorSetpoint(0.01));
+    new JoystickButton(m_driverController, XboxController.Button.kA.value)
+                .onTrue(new MoveToSetpoint(100.0));
+
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+               .onTrue(new SetElevatorSetpoint(1.5));
+    new JoystickButton(m_driverController, XboxController.Button.kB.value)
+                .onTrue(new MoveToSetpoint(100.0));
 
 
   }

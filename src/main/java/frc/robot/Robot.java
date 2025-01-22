@@ -38,6 +38,10 @@ public class Robot extends TimedRobot {
     oi = new OI();
   }
 
+  public static Elevator getElevator(){
+    return elevator;
+  }
+
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -93,7 +97,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    elevator.updateSetpoint(1.5);
   }
 
   @Override
@@ -105,4 +108,5 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
 }
