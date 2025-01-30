@@ -23,9 +23,9 @@ public class Constants {
 
 	public static final double kDistancePerTick = 2 * Math.PI * kPulleyRadius / kTicksPerRevolution / kGearRatio;
 
-	public static final double kP  = .9;
-	public static final double kI = 0;
-	public static final double kD = .3;
+	public static final double kP  = 1.0;
+	public static final double kI = 0.5;
+	public static final double kD = 0.2;
 
 	public static final double kBottomSetpoint = 0;
 	public static final double kMidSetpoint = 2;

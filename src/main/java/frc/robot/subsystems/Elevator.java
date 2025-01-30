@@ -13,6 +13,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -36,7 +38,9 @@ public class Elevator extends SubsystemBase {
   private double motorOutput;
   private double setpoint;
 
-  double[] measurementStdDevs = {0.01, 0.01};
+  ShuffleboardTab tab;
+
+  double[] measurementStdDevs = {0.0, 0.0};
 
   public enum ElevatorState{
     ZEROED, SETPOINT, DISABLED;
@@ -49,9 +53,18 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
 
 
-    
+    tab = Shuffleboard.getTab("MyTab");
+
     elevatorMotorsim = DCMotor.getVex775Pro(2);
-    elevatorSim = new ElevatorSim(elevatorMotorsim, Constants.Elevator.kGearRatio, Constants.Elevator.kCarriageMass, Constants.Elevator.kPulleyRadius, Constants.Elevator.kMinHeight, Constants.Elevator.kMaxHeight, true, errorSum, measurementStdDevs);
+    elevatorSim = new ElevatorSim(elevatorMotorsim, 
+      Constants.Elevator.kGearRatio, 
+      Constants.Elevator.kCarriageMass, 
+      Constants.Elevator.kPulleyRadius, 
+      Constants.Elevator.kMinHeight, 
+      Constants.Elevator.kMaxHeight, 
+      true, 
+      errorSum, 
+      measurementStdDevs);
     
     elevatorMaster = new SparkMax(1, MotorType.kBrushless);
     elevatorFollower = new SparkMax(2, MotorType.kBrushless);
@@ -67,16 +80,14 @@ public class Elevator extends SubsystemBase {
         .inverted(true)
         .idleMode(IdleMode.kBrake);
     elevatorFollowerConfig.closedLoop
-        .feedbackSensor(FeedbackSensor.kNoSensor)
-        .pid(1.0, 0, 0);
+        .feedbackSensor(FeedbackSensor.kNoSensor);
     
     
     elevatorFollowerConfig
       .inverted(false) 
       .idleMode(IdleMode.kCoast);
     elevatorFollowerConfig.closedLoop
-      .feedbackSensor(FeedbackSensor.kPrimaryEncoder) 
-      .pid(1.0, 0.0, 0.0);
+      .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
       
 
@@ -161,6 +172,10 @@ public class Elevator extends SubsystemBase {
     return elevatorSim.getPositionMeters();
   }
 
+  public double getSetpoint(){
+    return setpoint;
+  }
+
   public void simPeriodic(){
       if(elevatorSim.getPositionMeters() <= .03)  // 3 CM is the approx threshold for the limit Switch
         bottomLimitSwitch.set(true);
@@ -176,7 +191,6 @@ public class Elevator extends SubsystemBase {
   }
 
   public void updateState(ElevatorState newState){
-    System.out.println("updating state... supposedly");
     currState = newState;
   }
 

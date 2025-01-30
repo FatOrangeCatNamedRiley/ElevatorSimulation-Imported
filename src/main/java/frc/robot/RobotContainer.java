@@ -7,14 +7,19 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.Elevator;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.MoveToSetpoint;
 import frc.robot.commands.SetElevatorSetpoint;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,9 +35,17 @@ public class RobotContainer {
 
   private final XboxController m_driverController = new XboxController(Constants.OI.kDriverControllerPort);
 
+  private final CommandXboxController m_simulatorController = new CommandXboxController(0);
+
+  private final JoystickSim simulatorJoystick = new JoystickSim(0);
+
+  //private static Elevator m_elevator;
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
+    //m_elevator = Robot.getElevator();
     configureButtonBindings();
   }
 
@@ -45,15 +58,26 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
 
+    //new JoystickButton(m_driverController, XboxController.Button.kA.value)
+    //            .onTrue(new SetElevatorSetpoint(2));
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
-                .onTrue(new SetElevatorSetpoint(0.01));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
-                .onTrue(new MoveToSetpoint(100.0));
+              .onTrue(new MoveToSetpoint(0));
 
+    m_simulatorController.button(1).whileTrue(new MoveToSetpoint(0));
+
+    //new JoystickButton(m_driverController, XboxController.Button.kB.value)
+    //           .onTrue(new SetElevatorSetpoint(3));
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
-               .onTrue(new SetElevatorSetpoint(1.5));
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
-                .onTrue(new MoveToSetpoint(100.0));
+              .onTrue(new MoveToSetpoint(1.5));
+
+    m_simulatorController.button(2).whileTrue(new MoveToSetpoint(1.5));
+
+    //new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    //            .onTrue(new SetElevatorSetpoint(1));
+    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+                .onTrue(new MoveToSetpoint(3));
+
+    m_simulatorController.button(3).whileTrue(new MoveToSetpoint(3));
 
 
   }
