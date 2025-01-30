@@ -66,8 +66,8 @@ public class Elevator extends SubsystemBase {
       errorSum, 
       measurementStdDevs);
     
-    elevatorMaster = new SparkMax(1, MotorType.kBrushless);
-    elevatorFollower = new SparkMax(2, MotorType.kBrushless);
+    elevatorMaster = new SparkMax(Constants.Elevator.kElevatorMasterID, MotorType.kBrushless);
+    elevatorFollower = new SparkMax(Constants.Elevator.kElevatorFollowerID, MotorType.kBrushless);
 
     bottomLimitSwitch = new DigitalInputWrapper(5);
 
