@@ -4,30 +4,23 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 /** An example command that uses an example subsystem. */
 public class CoralScore extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final CoralScore subsystem;
-  private final double setPoint;
   private final boolean isLeft, isTop;
   /**
    * Creates a new ExampleCommand. 
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem s, Elevator e, double setElevatorPoint, boolean isItLeft, boolean isItTop) {
-    subsystem = s;
-    elevator = e;
-    setPoint = setElevatorPoint;
+  public CoralScore(boolean isItLeft, boolean isItTop)
     isLeft = isItLeft;
     isTop = isItTop;
     
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -56,7 +49,14 @@ public class CoralScore extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    /**
+    * Either reset to default pos, or just stay the same
+    * Will change later
+    * PLEASE
+    */
+    new MoveToSetpoint(0.0);
+  }
 
   // Returns true when the command should end.
   @Override
